@@ -181,8 +181,10 @@ def task_create():
     server_cmd = server_cmd[:11] + add_param + server_cmd[11:]
     server_cmd_supervisor = server_cmd_supervisor[:11] + add_param + server_cmd_supervisor[11:]
 
-    subprocess.run(server_cmd.split(' '), shell=True)
-    subprocess.run(server_cmd_supervisor.split(' '), shell=True)
+    print(server_cmd)
+    print(server_cmd_supervisor)
+    # subprocess.run(server_cmd.split(' '), shell=True)
+    # subprocess.run(server_cmd_supervisor.split(' '), shell=True)
 
 
     # 启动客户端
@@ -198,10 +200,12 @@ def task_create():
           if program["cmd"].startswith("docker run "):
             server_ip = "172.17.0.1"
             server_port = "9876"
-            add_param = " -e SERVER_IP={} -e SERVER_PORT={} -e MODEL_ID={} -e WORKER_ID=W{} ".format(
+            add_param = " -e SERVER_IP={} -e SERVER_PORT={} -e MODEL_ID={} -e WORKER_ID={} ".format(
               server_ip, server_port, mid, uid
             )
+
             program["cmd"] = program["cmd"][:11] + add_param + program["cmd"][11:]
+            print(program["cmd"])
 
           program.update({"mid":mid, "name": info["name"], "model_type": info["model_type"]})
           ws.start_task(program, uid)
