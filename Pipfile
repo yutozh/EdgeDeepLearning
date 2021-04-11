@@ -16,7 +16,6 @@ xlwt = "*"
 xlrd = "==1.2.0"
 flask-cors = "*"
 sqlalchemy-utils = "*"
-psycopg2 = "*"
 gevent = "==20.12.1"
 pycryptodome = "*"
 pydocx = {version = "*", index = "https://pypi.tuna.tsinghua.edu.cn/simple"}

@@ -10,7 +10,7 @@ import hashlib
 import logging
 import redis
 
-app = Flask(__name__, static_folder='../dist/static', static_url_path='/star/static')
+app = Flask(__name__, static_folder='../dist/static', static_url_path='/static')
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app, supports_credentials=True)
 db = SQLAlchemy()

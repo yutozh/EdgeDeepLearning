@@ -27,17 +27,18 @@
         </el-button>
       </div>
       <el-collapse-transition>
-        <div  v-show="c.show" class="box-card-content">
+        <div class="box-card-content">
+<!--        <div  v-show="c.show" class="box-card-content">-->
           <table class="content-table">
             <tr>
               <td><span>CPU型号：</span>{{ c.cpu }}</td>
-              <td><span>内存容量：</span>{{ c.memory }}</td>
+              <td><span>内存容量：</span>{{ c.memory }}GB</td>
               <td><span>操作系统：</span>{{ c.os }}</td>
             </tr>
             <tr>
-              <td><span>CPU占用：</span>{{ c.cpu_ing }}</td>
-              <td><span>内存占用：</span>{{ c.memory_ing }}</td>
-              <td><span>ping：</span>{{ c.ping }}</td>
+              <td><span>CPU占用：</span>{{ c.cpu_ing }}%</td>
+              <td><span>内存占用：</span>{{ c.memory_ing }}GB</td>
+              <td><span>ping：</span>{{ c.ping }}ms</td>
             </tr>
           </table>
         </div>
@@ -152,6 +153,7 @@ export default {
           show: false
         }
       ],
+      timer: null,
       currentPage: 1,
       totalNum: 1
     }
@@ -190,6 +192,16 @@ export default {
           })
         }
       })
+    }
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      this.fetchData()
+    }, 3000)
+  },
+  beforeDestroy () {
+    if (this.timer) {
+      clearInterval(this.timer)
     }
   }
 }
