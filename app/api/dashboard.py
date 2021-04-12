@@ -330,7 +330,7 @@ def task_stop():
     launch.stop_server(mid)
     launch.stop_client(mid)
 
-    db_func.update_task(mid, {'status': '训练结束', 'end_time': datetime.now()})
+    db_func.update_task(mid, {'status': '训练停止', 'end_time': datetime.now()})
 
     return jsonify({"result": 0, "message": "success"})
 
@@ -349,7 +349,7 @@ def task_delete():
     if qs_count == 0:
       return jsonify({"result": -1, "message": "未找到任务"})
 
-    if query_result[0]['status'] != '训练结束':
+    if query_result[0]['status'] != '训练停止':
       return jsonify({"result": -2, "message": "请先停止训练,再删除任务"})
 
     db_func.delete_task(mid)

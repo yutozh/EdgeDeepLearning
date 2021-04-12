@@ -26,5 +26,6 @@ class Task(db.Model):
       'program_info': self.program_info,
       'devices': self.devices,
       'status': self.status,
-      'create_time': self.create_time.strftime('%Y-%m-%d %H:%M:%S') if self.create_time else ''
+      'create_time': self.create_time.strftime('%Y-%m-%d %H:%M:%S') if self.create_time else '',
+      'end_time': '' if self.end_time == None else self.end_time.strftime('%Y-%m-%d %H:%M:%S')
     }
