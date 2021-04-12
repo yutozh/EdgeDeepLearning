@@ -78,6 +78,9 @@ def query_task(data, order_by='', page=1):
 
   return query_result, qs_count
 
+def update_task(mid, data):
+  Task.query.filter_by(mid=mid).update(data)
+  db.session.commit()
 
 def delete_task(mid):
   task = Task.query.filter_by(mid=mid).first()

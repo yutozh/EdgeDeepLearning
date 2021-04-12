@@ -14,6 +14,7 @@ class Task(db.Model):
   devices = db.Column(db.Text)
   status = db.Column(db.String(255), default="正在训练")
   create_time = db.Column(db.DateTime, default=datetime.datetime.now)
+  end_time = db.Column(db.DateTime)
 
 
   def get_dict(self):
