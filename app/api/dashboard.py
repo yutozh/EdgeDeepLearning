@@ -192,10 +192,10 @@ def task_create():
     # 检查用户选择的设备是否存在，是否上传了设备对应类型的客户端程序
     for uid in info["devices"].split('|'):
       item, _ = db_func.query_device({"uid": uid})
-
-      if item:
-        program = client_dict.get(item[0]["device_type"], '')
-        if program != '':
+      if item: # 设备存在
+        device_type = item[0]["device_type"]
+        program = client_dict.get(device_type, '')
+        if program != '': # 对应程序存在
           # cmd 注入
           if program["cmd"].startswith("docker run "):
             server_ip = "172.17.0.1"
@@ -208,6 +208,7 @@ def task_create():
             print(program["cmd"])
 
           program.update({"mid":mid, "name": info["name"], "model_type": info["model_type"]})
+          print(program)
           ws.start_task(program, uid)
           success_count += 1
 

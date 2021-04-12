@@ -31,7 +31,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     proxy: {
-      '/api*': {
+      '/': {
         // Forward frontend dev server request for /api to flask dev server
         target: 'http://localhost:8088/',
         ws: true,

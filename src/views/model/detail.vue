@@ -79,8 +79,8 @@
         align="center"
         show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-tag :type="scope.status | statusFilter">
-            {{ scope.status | statusFilterStr }}
+          <el-tag :type="scope.row.status | statusFilter">
+            {{ scope.row.status | statusFilterStr }}
           </el-tag>
         </template>
       </el-table-column>
@@ -89,7 +89,9 @@
         align="center"
         show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-button type="warning" size="mini" @click="stopTrain(scope.uid)">停止训练</el-button>
+          <el-button type="warning" size="mini" @click="stopTrain(scope.row.uid)">
+            停止训练
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,7 +99,7 @@
 </template>
 
 <script>
-import { getTask } from '@/api/all'
+import { getTask, stopTaskDevice } from '@/api/all'
 import Chart from '@/components/Charts/LineMarker'
 import moment from 'moment'
 import * as echarts from 'echarts'
@@ -452,10 +454,10 @@ export default {
       //初始化weosocket
       this.socket = io("/dashboard")
       this.socket.on("connect", () => {
-        console.log(this.socket.id); // x8WIv7-mJelg7on_ALbx
+        console.log("connected")
       })
       this.socket.on("disconnect", () => {
-        console.log(this.socket.id); // undefined
+        console.log("disconnect")
       })
       this.socket.emit("apply_model_info",
         {
@@ -464,7 +466,6 @@ export default {
         }
       )
       this.socket.on("push_task_info", (info) => {
-        console.log(info)
         let model_info = info.model_info
         this.accu_iter = model_info.iter
         this.loss_iter = model_info.iter
@@ -477,9 +478,31 @@ export default {
           newTableData.push(Object.assign(this.tableData[i], device_info[i]))
         }
         this.tableData = newTableData
-      });
+      })
+    },
+    stopTrain (uid) {
+      stopTaskDevice({mid: this.task.mid, uid: uid}).then(response => {
+        if (response.data.result === 0) {
+          this.$message({
+            type: 'success',
+            message: '停止指令已发出'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '停止失败!' + response.data.message
+          })
+        }
+        this.listLoading = false
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '停止失败! ' + res
+        })
+      })
     }
   },
+
   beforeDestroy () {
     if (this.timer) {
       clearInterval(this.timer); // 在Vue实例销毁前，清除我们的定时器

@@ -47,3 +47,11 @@ export function deleteTask(data) {
     data
   })
 }
+
+export function stopTaskDevice(data) {
+  return request({
+    url: '/dashboard/task/device/stop',
+    method: 'post',
+    data
+  })
+}

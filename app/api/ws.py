@@ -52,11 +52,13 @@ def heart(json):
     ping = json.get('ping','')
     cpu_ing = json.get('cpu_ing','')
     memory_ing = json.get('memory_ing','')
+    running = json.get('running','')
     timestamp = int(datetime.now().timestamp())
     redis_func.update_device_status(uid, dict(sid=sid,
                                               ip=ip,
                                               cpu_ing=cpu_ing,
                                               memory_ing=memory_ing,
+                                              running=running,
                                               timestamp=timestamp,
                                               ping=ping))
 

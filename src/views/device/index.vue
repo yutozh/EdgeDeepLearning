@@ -12,6 +12,7 @@
       <div slot="header" class="clearfix">
         <span class="header-item"><span class="header-label">设备名称</span> {{ c.name }}</span>
         <span class="header-item"><span class="header-label">IP</span> {{ c.ip }}</span>
+        <span class="header-item"><span class="header-label">训练任务</span> {{ c.running }}</span>
         <span class="header-item">
           <span class="header-label">状态</span>
           <el-tag effect="light" :type="c.timestamp | statusFilterTag" size="small" style="margin-left: 10px">
