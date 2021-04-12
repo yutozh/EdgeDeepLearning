@@ -33,7 +33,7 @@ module.exports = {
     proxy: {
       '/': {
         // Forward frontend dev server request for /api to flask dev server
-        target: 'http://localhost:8088/',
+        target: 'http://192.168.1.184:8088/',
         ws: true,
         changeOrigin: true
       }

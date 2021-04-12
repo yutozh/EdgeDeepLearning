@@ -51,22 +51,28 @@
       >
       </el-table-column>
       <el-table-column
-        prop="cpu_ing"
         label="cpu使用率"
         align="center"
         show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.cpu_ing }}%
+        </template>
       </el-table-column>
       <el-table-column
-        prop="memory_ing"
         label="内存使用率"
         align="center"
         show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.memory_ing }}GB / {{ scope.row.memory }}GB
+        </template>
       </el-table-column>
       <el-table-column
-        prop="ping"
         label="Ping"
         align="center"
         show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.ping }}ms
+        </template>
       </el-table-column>
       <el-table-column
         prop="times"

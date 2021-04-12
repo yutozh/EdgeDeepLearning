@@ -27,7 +27,7 @@
       <el-table-column label="结束时间" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span v-if="scope.row.status === '训练完成'">{{ scope.row.end_time }}</span>
+          <span v-if="scope.row.status !== '正在训练'">{{ scope.row.end_time }}</span>
           <span v-else> -- </span>
         </template>
       </el-table-column>

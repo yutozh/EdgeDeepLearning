@@ -30,7 +30,7 @@
       <el-collapse-transition>
         <div class="box-card-content">
 <!--        <div  v-show="c.show" class="box-card-content">-->
-          <table class="content-table">
+          <table class="content-table" style="table-layout: fixed">
             <tr>
               <td><span>CPU型号：</span>{{ c.cpu }}</td>
               <td><span>内存容量：</span>{{ c.memory }}GB</td>
