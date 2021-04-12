@@ -4,12 +4,19 @@ from flask import jsonify, current_app, session
 def update_device_status(uid, info):
   r.hmset("device-{}".format(uid), info)
 
+def update_device_model_status(uid, mid, status):
+  r.hset("model_device-{}".format(mid), uid, status)
+
 def get_device_status(uid):
   res = r.hgetall("device-{}".format(uid))
   return res
 
 def get_device_wsid(uid):
   res = r.hget("device-{}".format(uid), 'sid')
+  return res
+
+def get_device_model_status(uid, mid):
+  res = r.hget("model_device-{}".format(mid), uid)
   return res
 
 def get_model_status(mid):

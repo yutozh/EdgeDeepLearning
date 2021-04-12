@@ -245,7 +245,7 @@ def task_query():
       return jsonify({"result": -2, "message": "failed"})
 
     task = query_result[0]
-    # 获取设备信息(按顺序排好)
+    # 获取设备基本信息(不含实时信息，要按顺序排好，没有查到的返回{})
     uids = task["devices"].split("|")
     devices =  [{} for uid in uids]
     uid2index =  {int(uid): idx for idx, uid in enumerate(uids)}
@@ -276,3 +276,22 @@ def task_delete():
   except Exception as e:
     current_app.logger.error(e)
     return jsonify({"result": -2, "message": "failed"})
+
+
+@client_bp.route('/dashboard/task/device/stop', methods=["POST"])
+def task_device_stop():
+  try:
+    mid = request.json.get('mid', '')
+    uid = request.json.get('uid', '')
+    if mid == '' or uid == '':
+      return jsonify({"result": -1, "message": "failed"})
+
+    query_result, qs_count = db_func.query_task({'mid': mid})
+
+    if qs_count > 0 and ws.stop_task(query_result[0], uid):
+      return jsonify({"result": 0, "message": "success"})
+    else:
+      return jsonify({"result": -2, "message": "failed"})
+  except Exception as e:
+    current_app.logger.error(e)
+    return jsonify({"result": -3, "message": "failed"})

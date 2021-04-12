@@ -75,10 +75,22 @@
         show-overflow-tooltip>
       </el-table-column>
       <el-table-column
+        label="状态"
+        align="center"
+        show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-tag :type="scope.status | statusFilter">
+            {{ scope.status | statusFilterStr }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         align="center"
         show-overflow-tooltip>
-        <el-button type="warning" size="mini">停止训练</el-button>
+        <template slot-scope="scope">
+          <el-button type="warning" size="mini" @click="stopTrain(scope.uid)">停止训练</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -102,9 +114,17 @@ export default {
   filters: {
     statusFilter (status) {
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
+        '1': 'success',
+        '0': 'gray',
+        '-1': 'danger'
+      }
+      return statusMap[status]
+    },
+    statusFilterStr (status) {
+      const statusMap = {
+        '1': '训练中',
+        '0': '启动中',
+        '-1': '训练停止'
       }
       return statusMap[status]
     }
@@ -430,7 +450,7 @@ export default {
     },
     initWebSocket () {
       //初始化weosocket
-      this.socket = io("ws://127.0.0.1:8088/dashboard")
+      this.socket = io("/dashboard")
       this.socket.on("connect", () => {
         console.log(this.socket.id); // x8WIv7-mJelg7on_ALbx
       })
