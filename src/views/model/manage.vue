@@ -45,7 +45,7 @@
       <el-table-column align="center" label="操作" width="220" >
         <template slot-scope="scope">
           <el-link type="success" v-show="scope.row.status === '训练停止'" @click="startT(scope.row.mid)">开始训练</el-link>
-          <el-link type="warning" v-show="scope.row.status === '训练中'" @click="stopT(scope.row.mid)">停止训练</el-link>
+          <el-link type="warning" v-show="scope.row.status === '正在训练'" @click="stopT(scope.row.mid)">停止训练</el-link>
           <el-link v-show="scope.row.status === '训练完成'" disabled>开始训练</el-link>
           <el-link type="danger" @click="deleteT(scope.row.mid)">删除任务</el-link>
           <el-link type="primary" @click="showDetail(scope.row.mid)">查看详情</el-link>
