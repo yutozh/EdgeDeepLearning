@@ -175,6 +175,11 @@ export default {
           })
         }
         this.listLoading = false
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '获取设备列表失败! ' + res
+        })
       })
     },
     cancel (uid) {
@@ -191,6 +196,11 @@ export default {
             message: '注销失败!' + response.data.message
           })
         }
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '注销失败! ' + res
+        })
       })
     }
   },

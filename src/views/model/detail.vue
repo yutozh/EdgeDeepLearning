@@ -416,11 +416,16 @@ export default {
           this.initWebSocket()
         } else {
           this.$message({
-            type: 'danger',
+            type: 'error',
             message: '获取任务详情失败!' + response.data.message
           })
         }
         this.listLoading = false
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '获取任务详情失败! ' + res
+        })
       })
     },
     initWebSocket () {

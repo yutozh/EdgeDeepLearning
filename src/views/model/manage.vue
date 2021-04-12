@@ -125,11 +125,16 @@ export default {
           this.totalNum = response.data.count
         } else {
           this.$message({
-            type: 'danger',
+            type: 'error',
             message: '获取任务列表失败!' + response.data.message
           })
         }
         this.listLoading = false
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '获取任务列表失败! ' + res
+        })
       })
     },
     startT (mid) {
@@ -152,6 +157,11 @@ export default {
             message: '删除失败!' + response.data.message
           })
         }
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '删除失败! ' + res
+        })
       })
     },
     showDetail (mid) {

@@ -37,7 +37,12 @@
           </el-form-item>
 
           <el-form-item v-else label="镜像地址：">
-            <el-input size="mini" v-model="form.program_info.server.path" style="width: 350px;"/>
+            <el-input size="mini" v-model="form.program_info.server.path"
+                      @blur="autoFillCMD(form.program_info.server)" style="width: 350px;"/>
+          </el-form-item>
+          <br>
+          <el-form-item label="启动命令：" size="mini">
+            <el-input size="mini" v-model="form.program_info.server.cmd" style="width: 350px" />
           </el-form-item>
         </el-form>
       </el-form-item>
@@ -82,12 +87,12 @@
           </el-form-item>
 
           <el-form-item v-else label="镜像地址：" size="mini">
-            <el-input size="mini" v-model="form_item.path" style="width: 350px"/>
+            <el-input size="mini" v-model="form_item.path" @blur="autoFillCMD(form_item)" style="width: 350px"/>
           </el-form-item>
 
           <br>
           <el-form-item label="启动命令：" size="mini">
-            <el-input size="mini" v-model="form_item.cmd" style="width: 350px"/>
+            <el-input size="mini" v-model="form_item.cmd" style="width: 350px" />
           </el-form-item>
 
 
@@ -284,12 +289,15 @@ export default {
           })
         } else {
           this.$message({
-            type: 'danger',
-            message: '创建任务失败!' + response.data.message
+            type: 'error',
+            message: '创建任务失败! ' + response.data.message
           })
         }
       }).catch(res => {
-
+        this.$message({
+          type: 'error',
+          message: '创建任务失败! ' + res
+        })
       })
     },
     onCancel () {
@@ -313,6 +321,11 @@ export default {
     },
     handleUploadSuccess (item) {
 
+    },
+    autoFillCMD (form_item) {
+      if (form_item.path.length > 0) {
+        form_item.cmd = "docker run -d " + form_item.path
+      }
     }
   }
 }
@@ -356,7 +369,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.client-form .el-form-item {
+.client-form .el-form-item, .server-form .el-form-item {
   margin-bottom: 8px !important;
 }
 
