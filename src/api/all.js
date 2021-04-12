@@ -48,6 +48,22 @@ export function deleteTask(data) {
   })
 }
 
+export function startTask(data) {
+  return request({
+    url: '/dashboard/task/start',
+    method: 'post',
+    data
+  })
+}
+
+export function stopTask(data) {
+  return request({
+    url: '/dashboard/task/stop',
+    method: 'post',
+    data
+  })
+}
+
 export function stopTaskDevice(data) {
   return request({
     url: '/dashboard/task/device/stop',

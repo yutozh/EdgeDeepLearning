@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { getTaskList, deleteTask } from '@/api/all'
+import { getTaskList, deleteTask, stopTask, startTask } from '@/api/all'
 
 export default {
   filters: {
@@ -138,10 +138,46 @@ export default {
       })
     },
     startT (mid) {
-
+      startTask({mid: mid}).then(response => {
+        if (response.data.result === 0) {
+          this.$message({
+            type: 'success',
+            message: '任务启动成功'
+          })
+          this.fetchData()
+        } else {
+          this.$message({
+            type: 'danger',
+            message: '任务启动失败!' + response.data.message
+          })
+        }
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '任务启动失败! ' + res
+        })
+      })
     },
     stopT (mid) {
-
+      stopTask({mid: mid}).then(response => {
+        if (response.data.result === 0) {
+          this.$message({
+            type: 'success',
+            message: '任务停止成功'
+          })
+          this.fetchData()
+        } else {
+          this.$message({
+            type: 'danger',
+            message: '任务停止失败!' + response.data.message
+          })
+        }
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '任务停止失败! ' + res
+        })
+      })
     },
     deleteT (mid) {
       deleteTask({mid: mid}).then(response => {
