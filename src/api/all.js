@@ -71,3 +71,20 @@ export function stopTaskDevice(data) {
     data
   })
 }
+
+export function startTaskDevice(data) {
+  return request({
+    url: '/dashboard/task/device/start',
+    method: 'post',
+    data
+  })
+}
+
+export function rebootDevice(data) {
+  return request({
+    url: '/dashboard/device/reboot',
+    method: 'post',
+    data
+  })
+}
+

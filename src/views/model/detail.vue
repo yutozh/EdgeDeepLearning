@@ -98,6 +98,9 @@
           <el-button type="warning" size="mini" @click="stopTrain(scope.row.uid)">
             停止训练
           </el-button>
+          <el-button type="success" size="mini" @click="startTrain(scope.row.uid)">
+            开始训练
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -105,7 +108,7 @@
 </template>
 
 <script>
-import { getTask, stopTaskDevice } from '@/api/all'
+import { getTask, stopTaskDevice, startTaskDevice } from '@/api/all'
 import Chart from '@/components/Charts/LineMarker'
 import moment from 'moment'
 import * as echarts from 'echarts'
@@ -506,7 +509,28 @@ export default {
           message: '停止失败! ' + res
         })
       })
-    }
+    },
+    startTrain(uid) {
+      startTaskDevice({mid: this.task.mid, uid: uid}).then(response => {
+        if (response.data.result === 0) {
+          this.$message({
+            type: 'success',
+            message: '指令已发出'
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '启动失败!' + response.data.message
+          })
+        }
+        this.listLoading = false
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '启动失败! ' + res
+        })
+      })
+    },
   },
 
   beforeDestroy () {

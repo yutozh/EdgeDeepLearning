@@ -26,6 +26,9 @@
         <el-button style="float: right; padding: 3px 0; color: #f56c6c" type="text" @click="cancel(c.uid)">
           注销<i class="el-icon-link"></i>
         </el-button>
+        <el-button style="float: right; padding: 3px 0; color: #f56c6c" type="text" @click="reboot(c.uid)">
+          重启<i class="el-icon-switch-button"></i>
+        </el-button>
       </div>
       <el-collapse-transition>
         <div class="box-card-content">
@@ -60,7 +63,7 @@
 </template>
 
 <script>
-import { getDeviceList, deleteDevice } from '@/api/all'
+import { getDeviceList, deleteDevice, rebootDevice } from '@/api/all'
 import Table from "element-ui/lib/table";
 
 export default {
@@ -201,6 +204,27 @@ export default {
         this.$message({
           type: 'error',
           message: '注销失败! ' + res
+        })
+      })
+    },
+    reboot (uid) {
+      rebootDevice({uid: uid}).then(response => {
+        if (response.data.result === 0) {
+          this.$message({
+            type: 'success',
+            message: '指令已发出'
+          })
+          this.fetchData()
+        } else {
+          this.$message({
+            type: 'error',
+            message: '重启失败!' + response.data.message
+          })
+        }
+      }).catch(res => {
+        this.$message({
+          type: 'error',
+          message: '重启失败! ' + res
         })
       })
     }
