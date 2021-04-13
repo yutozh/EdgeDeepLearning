@@ -242,6 +242,20 @@ def task_list():
 
     query_result, count = db_func.query_task({}, page=int(page))
 
+    for t in query_result:
+      devices = t["devices"].split("|")
+      t["devices_running"] = 0
+      t["devices_starting"] = 0
+      t["devices_stopped"] = 0
+      for uid in devices:
+        device_status = str(redis_func.get_device_model_status(uid, t["mid"]))
+        if device_status == '1':
+          t['devices_running'] += 1
+        if device_status == '0':
+          t['devices_starting'] += 1
+        if device_status == '-1':
+          t['devices_stopped'] += 1
+
     return jsonify({"result": 0, "message": "success", "value": query_result, "count": count})
 
   except Exception as e:
@@ -283,7 +297,7 @@ def task_start():
     mid = request.json.get('mid', '')
     if mid == '':
       return jsonify({"result": -1, "message": "failed"})
-    # 添加任务
+
     query_result, qs_count = db_func.query_task({'mid': mid})
     if qs_count == 0:
       return jsonify({"result": -2, "message": "任务未找到"})
@@ -309,9 +323,12 @@ def task_start():
     server_ip = current_app.config["SERVER_IP"]
     server_port = int(current_app.config["SERVER_PORT"]) + int(mid) % 65535
 
-    launch.launch_server(user_server_cmd, server_ip, server_port, mid)
+    launch.restart_server(mid)
     success_count = launch.launch_client(task_item["devices"].split('|'), client_dict, server_ip, server_port,
                          mid, task_item["name"], task_item["model_type"])
+
+    # 更新状态
+    db_func.update_task(mid, {'status': '正在训练', 'end_time': None})
 
     return jsonify({"result": 0, "message": "success", "value": success_count})
 
@@ -352,6 +369,7 @@ def task_delete():
     if query_result[0]['status'] != '训练停止':
       return jsonify({"result": -2, "message": "请先停止训练,再删除任务"})
 
+    launch.delete_server(mid) # 删除server的容器, client的在停止时已经删除
     db_func.delete_task(mid)
 
     return jsonify({"result": 0, "message": "success"})

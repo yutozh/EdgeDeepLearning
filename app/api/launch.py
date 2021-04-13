@@ -29,6 +29,15 @@ def launch_server(user_server_cmd, server_ip, server_port, mid):
 
   return True
 
+def restart_server(mid):
+  server_docker_name = "server_{}".format(mid)
+  supervisor_docker_name = "supervisor_{}".format(mid)
+
+  subprocess.run("docker start  {}".format(server_docker_name), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  subprocess.run("docker start  {}".format(supervisor_docker_name), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+  return True
+
 def launch_client(uids, client_dict, server_ip, server_port, mid, task_name, model_type):
   # 启动客户端
   success_count = 0
@@ -69,3 +78,13 @@ def stop_client(mid):
   uids = query_result[0]["devices"].split('|')
   for uid in uids:
     ws.stop_task(query_result[0], uid)
+
+
+def delete_server(mid):
+  server_docker_name = "server_{}".format(mid)
+  supervisor_docker_name = "supervisor_{}".format(mid)
+  subprocess.run("docker rm -f {} &".format(server_docker_name), shell=True, stdout=subprocess.PIPE,
+                 stderr=subprocess.PIPE)
+  subprocess.run("docker rm -f {} &".format(supervisor_docker_name), shell=True, stdout=subprocess.PIPE,
+                 stderr=subprocess.PIPE)
+

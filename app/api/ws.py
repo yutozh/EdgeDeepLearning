@@ -21,6 +21,7 @@ def stop_task(json, uid):
     return True
   return False
 
+
 def get_model_detail_period(mid, sid, uids):
   while sid in all_background_thread:
     model_info = redis_func.get_model_status(mid)

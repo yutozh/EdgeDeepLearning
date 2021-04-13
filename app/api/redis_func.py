@@ -17,7 +17,7 @@ def get_device_wsid(uid):
 
 def get_device_model_status(uid, mid):
   res = r.hget("model_device-{}".format(mid), uid)
-  return res
+  return 0 if res == None else res
 
 def get_model_status(mid):
   res_0 = r.lrange("model-{}-iter".format(mid), -30, -1)
