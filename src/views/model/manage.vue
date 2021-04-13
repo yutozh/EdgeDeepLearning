@@ -32,9 +32,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="节点数量" align="center">
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">
+          节点数量<br>(运行中 / 正在启动 / 已停止)
+        </template>
         <template slot-scope="scope">
-          {{ scope.row.devices }} / {{ scope.row.devices.split("|").length }}
+          {{ scope.row.devices_running }} / {{ scope.row.devices_starting }} / {{ scope.row.devices_stopped }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="任务状态" align="center">
