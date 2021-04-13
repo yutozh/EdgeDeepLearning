@@ -378,6 +378,40 @@ def task_delete():
     current_app.logger.error(e)
     return jsonify({"result": -3, "message": "failed"})
 
+@client_bp.route('/dashboard/task/device/start', methods=["POST"])
+def task_device_start():
+  try:
+    mid = request.json.get('mid', '')
+    uid = request.json.get('uid', '')
+    if mid == '':
+      return jsonify({"result": -1, "message": "failed"})
+
+    query_result, qs_count = db_func.query_task({'mid': mid})
+    if qs_count == 0:
+      return jsonify({"result": -2, "message": "任务未找到"})
+
+    task_item = query_result[0]
+    if task_item["status"] == "训练停止":
+      return jsonify({"result": -2, "message": "任务已停止"})
+
+    program_info = query_result[0]["program_info"]
+
+    # 解析程序相关信息
+    client_info = program_info["client"]
+    client_dict = {c["object"]: c for c in client_info}
+
+    server_ip = current_app.config["SERVER_IP"]
+    server_port = int(current_app.config["SERVER_PORT"]) + int(mid) % 65535
+
+    launch.launch_client([uid], client_dict, server_ip, server_port,
+                         mid, task_item["name"], task_item["model_type"])
+
+    return jsonify({"result": 0, "message": "success"})
+
+  except Exception as e:
+    traceback.print_exc()
+    current_app.logger.error(e)
+    return jsonify({"result": -2, "message": "failed"})
 
 @client_bp.route('/dashboard/task/device/stop', methods=["POST"])
 def task_device_stop():
@@ -390,6 +424,21 @@ def task_device_stop():
     query_result, qs_count = db_func.query_task({'mid': mid})
 
     if qs_count > 0 and ws.stop_task(query_result[0], uid):
+      return jsonify({"result": 0, "message": "success"})
+    else:
+      return jsonify({"result": -2, "message": "failed"})
+  except Exception as e:
+    current_app.logger.error(e)
+    return jsonify({"result": -3, "message": "failed"})
+
+@client_bp.route('/dashboard/device/reboot', methods=["POST"])
+def task_device_reboot():
+  try:
+    uid = request.json.get('uid', '')
+    if uid == '':
+      return jsonify({"result": -1, "message": "failed"})
+
+    if ws.reboot(uid):
       return jsonify({"result": 0, "message": "success"})
     else:
       return jsonify({"result": -2, "message": "failed"})

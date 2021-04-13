@@ -5,6 +5,7 @@
 # @Author：zyt
 import subprocess
 from app.api import db_func, ws
+import copy
 
 def launch_server(user_server_cmd, server_ip, server_port, mid):
   server_docker_name = "server_{}".format(mid)
@@ -47,18 +48,20 @@ def launch_client(uids, client_dict, server_ip, server_port, mid, task_name, mod
     if item:  # 设备存在
       device_type = item[0]["device_type"]
       program = client_dict.get(device_type, '')
-      if program != '':  # 对应程序存在
+      program_item = copy.deepcopy(program)
+
+      if program_item != '':  # 对应程序存在
         # cmd 注入
-        if program["cmd"].startswith("docker run "):
+        if program_item["cmd"].startswith("docker run "):
           add_param = " -e SERVER_IP={} -e SERVER_PORT={} -e MODEL_ID={} -e WORKER_ID={} ".format(
             server_ip, server_port, mid, uid
           )
 
-          program["cmd"] = program["cmd"][:11] + add_param + program["cmd"][11:]
-          print(program["cmd"])
+          program_item["cmd"] = program_item["cmd"][:11] + add_param + program_item["cmd"][11:]
+          print(program_item["cmd"])
 
-        program.update({"mid": mid, "name": task_name, "model_type": model_type})
-        ws.start_task(program, uid)
+        program_item.update({"mid": mid, "name": task_name, "model_type": model_type})
+        ws.start_task(program_item, uid)
         success_count += 1
   return success_count
 

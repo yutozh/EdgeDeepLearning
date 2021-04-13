@@ -21,6 +21,12 @@ def stop_task(json, uid):
     return True
   return False
 
+def reboot(uid):
+  sid = redis_func.get_device_wsid(uid)
+  if sid:
+    socketio.emit('reboot', {}, json=True, room=sid)
+    return True
+  return False
 
 def get_model_detail_period(mid, sid, uids):
   while sid in all_background_thread:
