@@ -22,6 +22,8 @@ def launch_server(user_server_cmd, server_ip, server_port, mid):
 
   print(server_cmd)
   print(server_cmd_supervisor)
+  subprocess.run("docker rm -f {}".format(server_docker_name), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  subprocess.run("docker rm -f {}".format(supervisor_docker_name), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   subprocess.run(server_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   subprocess.run(server_cmd_supervisor, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -54,9 +56,9 @@ def launch_client(uids, client_dict, server_ip, server_port, mid, task_name, mod
 def stop_server(mid):
   server_docker_name = "server_{}".format(mid)
   supervisor_docker_name = "supervisor_{}".format(mid)
-  subprocess.run("docker stop {}".format(server_docker_name), shell=True, stdout=subprocess.PIPE,
+  subprocess.run("docker stop {} &".format(server_docker_name), shell=True, stdout=subprocess.PIPE,
                  stderr=subprocess.PIPE)
-  subprocess.run("docker stop {}".format(supervisor_docker_name), shell=True, stdout=subprocess.PIPE,
+  subprocess.run("docker stop {} &".format(supervisor_docker_name), shell=True, stdout=subprocess.PIPE,
                  stderr=subprocess.PIPE)
 
 
