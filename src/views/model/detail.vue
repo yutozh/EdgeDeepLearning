@@ -96,10 +96,10 @@
         show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="warning" size="mini" @click="stopTrain(scope.row.uid)">
-            停止训练
+            停止
           </el-button>
           <el-button type="success" size="mini" @click="startTrain(scope.row.uid)">
-            开始训练
+            开始
           </el-button>
         </template>
       </el-table-column>
