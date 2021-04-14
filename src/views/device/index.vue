@@ -77,7 +77,7 @@ export default {
       }
     },
     statusFilter(timestamp) {
-      if (Date.parse(new Date()) / 1000 - timestamp > 300) {
+      if (Date.parse(new Date()) / 1000 - timestamp > 10) {
         return "离线"
       } else {
         return "在线"
