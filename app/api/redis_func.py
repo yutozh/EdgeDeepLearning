@@ -24,7 +24,7 @@ def get_model_status(mid):
   res_1 = r.lrange("model-{}-accu".format(mid), -30, -1)
   res_2 = r.lrange("model-{}-loss".format(mid), -30, -1)
 
-  return {"iter": res_0, "accu": res_1, "loss": res_2}
+  return {"iter": res_0, "accu": [float(i) * 100 for i in res_1], "loss": res_2}
 
 def get_device_model_contribute_time(uid, mid):
   res = r.get("contribute-{}-{}".format(uid, mid))

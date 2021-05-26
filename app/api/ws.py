@@ -24,7 +24,7 @@ def stop_task(json, uid):
 def reboot(uid):
   sid = redis_func.get_device_wsid(uid)
   if sid:
-    socketio.emit('reboot', {}, json=True, room=sid)
+    socketio.emit('reboot', room=sid)
     return True
   return False
 
