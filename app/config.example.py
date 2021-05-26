@@ -49,7 +49,9 @@ class Config(object):
     # JWT KEY
     JWT_KEY = ""
 
-
+    SERVER_IP = "192.168.1.184"
+    SERVER_PORT = "9876"
+    
     if not os.path.exists(DIST_DIR):
         raise Exception(
             'DIST_DIR not found: {}'.format(DIST_DIR))
